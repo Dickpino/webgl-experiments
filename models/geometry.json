@@ -1,0 +1,15 @@
+{
+	"metadata": {
+		"version": 4.5,
+		"type": "BufferGeometry",
+		"generator": "BufferGeometry.toJSON"
+	},
+	"uuid": "20498977-24FD-4824-970E-3DAD5040564C",
+	"type": "CylinderBufferGeometry",
+	"radiusTop": 2.38,
+	"radiusBottom": 2.38,
+	"height": 1.2,
+	"radialSegments": 6,
+	"heightSegments": 1,
+	"openEnded": false
+}
