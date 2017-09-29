@@ -131,12 +131,17 @@ function init() {
       scene.add(cube);
       this.numberOfObjects = scene.children.length;
     };
+
+    this.outputObjects = function () {
+      console.log(scene.children);
+    };
   };
 
   const gui = new dat.GUI();
   gui.add(controls, 'rotationSpeed', 0, 0.5);
   gui.add(controls, 'bouncingSpeed', 0, 0.5);
   gui.add(controls, 'addCube');
+  gui.add(controls, 'outputObjects');
   gui.addColor(controls, 'pointColor').onChange((e) => {
     pointLight.color = new THREE.Color(e);
   });
