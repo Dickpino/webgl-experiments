@@ -24,7 +24,7 @@ $(function() {
   
     cube.position.x = 0;
     cube.position.y = 0;
-    cube.position.z = 5;
+    cube.position.z = 0;
   
     const loader = new THREE.ObjectLoader();
     loader.load(
