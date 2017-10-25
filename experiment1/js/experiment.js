@@ -1,15 +1,15 @@
-// once everything is loaded, we run our Three.js stuff.
+// once everything is loaded, we run our Three.js content.
 function init() {
 
   const stats = initStats();
   // create a scene, that will hold all our elements such as objects, cameras and lights.
   const scene = new THREE.Scene();
 
-  // create a camera, which defines where we're looking at.
-  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-
   const width = window.innerWidth;
   const height = window.innerHeight;
+
+  // create a camera, which defines where we're looking at.
+  const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
 
   // create a render and set the size
   const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -97,18 +97,18 @@ function init() {
     this.intensity = 1.6;
 
     this.addCube = () => {
-      let cubeSize = Math.ceil((Math.random() * 3));
-      let cubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-      let cubeMaterial = new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff });
-      let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-      cube.castShadow = true;
-      cube.name = 'cube-' + scene.children.length;
+      const cubeSize = Math.ceil((Math.random() * 3));
+      const cubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+      const cubeMaterial = new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff });
+      const randomCube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      randomCube.castShadow = true;
+      randomCube.name = 'randomCube-' + scene.children.length;
       // position the cube randomly in the scene
-      cube.position.x = -30 + Math.round((Math.random() * planeGeometry.parameters.width));
-      cube.position.y = Math.round((Math.random() * 5));
-      cube.position.z = -20 + Math.round((Math.random() * planeGeometry.parameters.height));
+      randomCube.position.x = -30 + Math.round((Math.random() * planeGeometry.parameters.width));
+      randomCube.position.y = Math.round((Math.random() * 5));
+      randomCube.position.z = -20 + Math.round((Math.random() * planeGeometry.parameters.height));
       // add the cube to the scene
-      scene.add(cube);
+      scene.add(randomCube);
       this.numberOfObjects = scene.children.length;
     };
 
@@ -129,13 +129,13 @@ function init() {
     pointLight.intensity = e;
   });
 
+  // Creating a mesh object and fills it with json data for the geometry and materials that have been used.
   let mesh = null;
-
   const loader = new THREE.JSONLoader();
   loader.load('models/fles.json', function(geometry, materials) {
     mesh = new THREE.Mesh(geometry, materials);
-    mesh.scale.set(3,3,3);
-    mesh.position.set(8,0,3);
+    mesh.scale.set(3, 3, 3);
+    mesh.position.set(8, 0, 3);
     scene.add(mesh);
   });
 
