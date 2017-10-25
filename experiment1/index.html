@@ -1,16 +1,29 @@
-<html>
-	<head>
-		<meta charset=utf-8>
-    <title>My first three.js app</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+<!DOCTYPE html>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>  
-    <script src="js/three.js"></script>
-    <script src="js/experiment.js"></script>
-	</head>
-	<body>
-		<div id="webGL-container">
-  </div>
-		
-	</body>
+<html>
+
+<head>
+    <title>Example 01.01 - Basic skeleton</title>
+    <script type="text/javascript" src="/js/three.js"></script>
+    <script type="text/javascript" src="/js/experiment.js"></script>
+    <!-- Helper to get the frames per second -->
+    <script type="text/javascript" src="/js/Stats.js"></script>
+    <!-- Good helper to adjust animations properties in the webbrowser -->
+    <script type="text/javascript" src="/js/dat.gui.js"></script>
+    
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to
+             use the complete page */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>  
+  <!-- Div which will hold the Output -->
+<div id="webgl-container"></div>
+<div id="Stats-output"></div>
+
+</body>
 </html>
