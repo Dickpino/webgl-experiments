@@ -1,0 +1,53 @@
+// once everything is loaded, we run our Babylon.JS content.
+function init() {
+
+  const canvas = document.getElementById('renderCanvas');
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+
+  const engine = new BABYLON.Engine(canvas, true);
+
+  const createScene = function() {
+    // create a basic BJS Scene object
+    const scene = new BABYLON.Scene(engine);
+
+    // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
+    const camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5,-10), scene);
+    
+    camera.inputs.clear();
+
+    // target the camera to scene origin
+    camera.setTarget(BABYLON.Vector3.Zero());
+
+    // attach the camera to the canvas
+    camera.attachControl(canvas, false);
+
+    // create a basic light, aiming 0,1,0 - meaning, to the sky
+    const light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), scene);
+
+    // create a built-in "box" shape; its constructor takes 3 params: name, height, scene
+    var box = BABYLON.MeshBuilder.CreateBox("box", {height: 1}, scene);
+
+    // move the sphere upward 1/2 of its height
+    box.position.y = 1;
+    box.rotation.y = 30;
+
+    // create a built-in "ground" shape; its constructor takes 5 params: name, width, height, subdivisions and scene
+    const ground = BABYLON.Mesh.CreateGround('ground1', 6, 6, 2, scene);
+
+    // return the created scene
+    return scene;
+  }
+
+  const scene = createScene();
+
+  engine.runRenderLoop(function() {
+    scene.render();
+  });
+
+  window.addEventListener('resize', function() {
+    engine.resize();
+  });
+}
+
+window.onload = init;
