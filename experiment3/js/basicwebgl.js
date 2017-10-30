@@ -1,14 +1,27 @@
+main();
 
-const canvas = document.getElementById('glCanvas');
-const gl = canvas.getContext('webgl');
+//
+// start here
+//
+function main() {
+  const canvas = document.querySelector("#glCanvas");
+  // Initialize the GL context
+  const gl = canvas.getContext("webgl");
 
-gl.clearColor(0, 0, 0, 1.0);
-gl.clear(gl.COLOR_BUFFER_BIT);
+  // Only continue if WebGL is available and working
+  if (!gl) {
+    alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+    return;
+  }
 
+  // Set clear color to black, fully opaque
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  // Clear the color buffer with specified clear color
+  gl.clear(gl.COLOR_BUFFER_BIT);
 
   // Vertex shader program
 
-const vsSource = `
+  const vsSource = `
   attribute vec4 aVertexPosition;
 
   uniform mat4 uModelViewMatrix;
@@ -17,13 +30,35 @@ const vsSource = `
   void main() {
     gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
   }
-`;
+  `;
 
-const fsSource = `
-void main() {
-  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+  // Fragment Shader for adding color
+  const fsSource = `
+  void main() {
+    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+  }
+  `;
+
+  const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+
+  const programInfo = {
+    program: shaderProgram,
+    attribLocations: {
+      vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+    },
+    uniformLocations: {
+      projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
+      modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+    },
+  };
+
+  // Here's where we call the routine that builds all the
+  // objects we'll be drawing.
+  const buffers = initBuffers(gl);
+
+    // Draw the scene
+    drawScene(gl, programInfo, buffers);
 }
-`;
 
 //
 // Initialize a shader program, so WebGL knows how to draw our data
@@ -74,57 +109,38 @@ function loadShader(gl, type, source) {
 
   return shader;
 }
-const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
-
-// The programinfo contains locations of the attributes and uniform of a specific shader program 
-// so it will be stored together to make it easy to pass around
-const programInfo = {
-  program: shaderProgram,
-  attribLocations: {
-    vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-  },
-  uniformLocations: {
-    projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-    modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-  },
-};
-
-
-// Setting up the Buffers that contains the positions for the vertex shaders
 function initBuffers(gl) {
-  // Create a buffer for the square's positions.
+// Create a buffer for the square's positions.
+const positionBuffer = gl.createBuffer();
 
-  const positionBuffer = gl.createBuffer();
+// Select the positionBuffer as the one to apply buffer
+// operations to from here out.
 
-  // Select the positionBuffer as the one to apply buffer
-  // operations to from here out.
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+// Now create an array of positions for the square.
 
-  // Now create an array of positions for the square.
-
-  const positions = [
-    1.0, 1.0,
-    -1.0, 1.0,
+const positions = [
+    1.0,  1.0,
+  -1.0,  1.0,
     1.0, -1.0,
-    -1.0, -1.0,
-  ];
+  -1.0, -1.0,
+];
 
-  // Now pass the list of positions into WebGL to build the
-  // shape. We do this by creating a Float32Array(array of items with 32-bits floating point numbers) from the
-  // JavaScript array, then use it to fill the current buffer.
+// Now pass the list of positions into WebGL to build the
+// shape. We do this by creating a Float32Array from the
+// JavaScript array, then use it to fill the current buffer.
 
-  gl.bufferData(gl.ARRAY_BUFFER,
-                new Float32Array(positions),
-                gl.STATIC_DRAW);
+gl.bufferData(gl.ARRAY_BUFFER,
+              new Float32Array(positions),
+              gl.STATIC_DRAW);
 
   return {
     position: positionBuffer,
   };
 }
 
-// Rendering the Scene
 function drawScene(gl, programInfo, buffers) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
@@ -151,10 +167,10 @@ function drawScene(gl, programInfo, buffers) {
   // note: glmatrix.js always has the first argument
   // as the destination to receive the result.
   mat4.perspective(projectionMatrix,
-                    fieldOfView,
-                    aspect,
-                    zNear,
-                    zFar);
+                   fieldOfView,
+                   aspect,
+                   zNear,
+                   zFar);
 
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
@@ -164,8 +180,8 @@ function drawScene(gl, programInfo, buffers) {
   // start drawing the square.
 
   mat4.translate(modelViewMatrix,     // destination matrix
-                  modelViewMatrix,     // matrix to translate
-                  [-0.0, 0.0, -6.0]);  // amount to translate
+                 modelViewMatrix,     // matrix to translate
+                 [-0.0, 0.0, -6.0]);  // amount to translate
 
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
@@ -209,5 +225,3 @@ function drawScene(gl, programInfo, buffers) {
     gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
   }
 }
-
-drawScene(gl, programInfo, initBuffers);
