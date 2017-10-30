@@ -27,18 +27,18 @@ function init() {
   // add the plane to the scene
   scene.add(plane);
 
-  // create a cube
+  // create a cube with Phong material
   const cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
   const cubeMaterial = new THREE.MeshPhongMaterial({color: 0xbb0000 });
   const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-
+  scene.add(cube);
+  
   // position the cube
   cube.position.x = -4;
   cube.position.y = 8;
   cube.position.z = 0;
 
   // add the cube to the scene
-  scene.add(cube);
 
   // position and point the camera to the center of the scene
   camera.position.x = -30;

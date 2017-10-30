@@ -23,10 +23,15 @@ function init() {
     camera.attachControl(canvas, false);
 
     // create a basic light, aiming 0,1,0 - meaning, to the sky
-    const light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), scene);
+    const light = new BABYLON.PointLight('light1', new BABYLON.Vector3(0, 5, -5), scene);
+    
+    // Creating material for the box and giving it a color
+    var boxMaterial = new BABYLON.StandardMaterial("boxMaterial", scene);
+    boxMaterial.diffuseColor = new BABYLON.Color3(1, 0, 1);
 
     // create a built-in "box" shape; its constructor takes 3 params: name, height, scene
     var box = BABYLON.MeshBuilder.CreateBox("box", {height: 1}, scene);
+    box.material = boxMaterial;
 
     // move the sphere upward 1/2 of its height
     box.position.y = 1;
@@ -41,6 +46,7 @@ function init() {
 
   const scene = createScene();
 
+  // Rendering the scene
   engine.runRenderLoop(function() {
     scene.render();
   });
