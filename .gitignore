@@ -1,4 +1,6 @@
 /node_modules/*
 
+/experiment2/node_modules
+
 # Yarn
 yarn.lock
